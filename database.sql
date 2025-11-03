@@ -552,57 +552,59 @@ CREATE TABLE IF NOT EXISTS `crafting_cooldowns` (
 
 DROP TABLE IF EXISTS `dealer_data`;
 CREATE TABLE IF NOT EXISTS `dealer_data` (
-    `dealership` VARCHAR(255) NOT NULL,
-    `sales` INT DEFAULT 0,
-    `revenue` DECIMAL(15,2) DEFAULT 0,
-    `inventory` LONGTEXT DEFAULT NULL,
-    `settings` LONGTEXT DEFAULT NULL,
-    PRIMARY KEY (`dealership`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `dealership` varchar(255) NOT NULL,
+  `sales` int(11) DEFAULT 0,
+  `revenue` decimal(15,2) DEFAULT 0.00,
+  `inventory` longtext DEFAULT NULL,
+  `settings` longtext DEFAULT NULL,
+  `profitPercentage` decimal(5,2) DEFAULT 0.00,
+  `commission` decimal(5,2) DEFAULT 0.00,
+  PRIMARY KEY (`dealership`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 DROP TABLE IF EXISTS `dealer_records`;
 CREATE TABLE IF NOT EXISTS `dealer_records` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `dealership` VARCHAR(255) NOT NULL,
-    `time` INT(11) NOT NULL,
-    `seller` LONGTEXT DEFAULT NULL,
-    `buyer` LONGTEXT DEFAULT NULL,
-    `vehicle` LONGTEXT DEFAULT NULL,
-    `price` DECIMAL(15,2) DEFAULT 0,
-    `commission` DECIMAL(15,2) DEFAULT 0,
-    PRIMARY KEY (`id`),
-    KEY `dealership` (`dealership`),
-    KEY `time` (`time`),
-    CONSTRAINT `seller` CHECK (json_valid(`seller`)),
-    CONSTRAINT `buyer` CHECK (json_valid(`buyer`)),
-    CONSTRAINT `vehicle` CHECK (json_valid(`vehicle`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dealership` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `seller` longtext DEFAULT NULL,
+  `buyer` longtext DEFAULT NULL,
+  `vehicle` longtext DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT 0.00,
+  `commission` decimal(15,2) DEFAULT 0.00,
+  PRIMARY KEY (`id`),
+  KEY `dealership` (`dealership`),
+  KEY `time` (`time`),
+  CONSTRAINT `seller` CHECK (json_valid(`seller`)),
+  CONSTRAINT `buyer` CHECK (json_valid(`buyer`)),
+  CONSTRAINT `vehicle` CHECK (json_valid(`vehicle`))
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 DROP TABLE IF EXISTS `dealer_records_buybacks`;
 CREATE TABLE IF NOT EXISTS `dealer_records_buybacks` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `dealership` VARCHAR(255) NOT NULL,
-    `time` INT(11) NOT NULL,
-    `seller` LONGTEXT DEFAULT NULL,
-    `buyer` LONGTEXT DEFAULT NULL,
-    `vehicle` LONGTEXT DEFAULT NULL,
-    `price` DECIMAL(15,2) DEFAULT 0,
-    `commission` DECIMAL(15,2) DEFAULT 0,
-    PRIMARY KEY (`id`),
-    KEY `dealership` (`dealership`),
-    KEY `time` (`time`),
-    CONSTRAINT `seller` CHECK (json_valid(`seller`)),
-    CONSTRAINT `buyer` CHECK (json_valid(`buyer`)),
-    CONSTRAINT `vehicle` CHECK (json_valid(`vehicle`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dealership` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `seller` longtext DEFAULT NULL,
+  `buyer` longtext DEFAULT NULL,
+  `vehicle` longtext DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT 0.00,
+  `commission` decimal(15,2) DEFAULT 0.00,
+  PRIMARY KEY (`id`),
+  KEY `dealership` (`dealership`),
+  KEY `time` (`time`),
+  CONSTRAINT `seller` CHECK (json_valid(`seller`)),
+  CONSTRAINT `buyer` CHECK (json_valid(`buyer`)),
+  CONSTRAINT `vehicle` CHECK (json_valid(`vehicle`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 DROP TABLE IF EXISTS `dealer_showrooms`;
 CREATE TABLE IF NOT EXISTS `dealer_showrooms` (
-    `dealership` VARCHAR(255) NOT NULL,
-    `showroom` LONGTEXT DEFAULT NULL,
-    PRIMARY KEY (`dealership`),
-    CONSTRAINT `showroom` CHECK (json_valid(`showroom`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `dealership` varchar(255) NOT NULL,
+  `showroom` longtext DEFAULT NULL,
+  PRIMARY KEY (`dealership`),
+  CONSTRAINT `showroom` CHECK (json_valid(`showroom`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 DROP TABLE IF EXISTS `dealer_stock`;
 CREATE TABLE IF NOT EXISTS `dealer_stock` (
@@ -613,9 +615,9 @@ CREATE TABLE IF NOT EXISTS `dealer_stock` (
   `quantity` int(11) NOT NULL DEFAULT 0,
   `lastStocked` int(11) DEFAULT NULL,
   `lastPurchase` int(11) DEFAULT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY `dealership_vehicle` (`dealership`, `vehicle`),
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  UNIQUE KEY `dealership_vehicle` (`dealership`,`vehicle`),
   KEY `dealership` (`dealership`),
   KEY `vehicle` (`vehicle`),
   CONSTRAINT `data` CHECK (json_valid(`data`))
