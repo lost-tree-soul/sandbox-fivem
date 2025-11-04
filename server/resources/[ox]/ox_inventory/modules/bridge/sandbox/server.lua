@@ -198,6 +198,25 @@ AddEventHandler("onResourceStart", function(resource)
         },
     }, 1)
 
+    RegisterServerEvent('Jobs:Server:JobUpdate', function(source)
+        local playerInventory = Inventory(source)
+        if playerInventory then
+            local newPlayerData = server.setPlayerData({ source = source })
+            
+            if newPlayerData.groups then
+                playerInventory.player.groups = newPlayerData.groups
+            end
+            
+            if newPlayerData.workplaces then
+                playerInventory.player.workplaces = newPlayerData.workplaces
+            end
+            
+            if server.syncInventory then
+                server.syncInventory(playerInventory)
+            end
+        end
+    end)
+
     exports["sandbox-chat"]:RegisterAdminCommand("clearinv", function(source, args, rawCommand)
         if args[1] == 'me' then
             exports.ox_inventory:ClearInventory(source)
