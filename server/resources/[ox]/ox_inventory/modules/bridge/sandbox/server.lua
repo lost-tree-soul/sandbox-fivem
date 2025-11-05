@@ -698,6 +698,56 @@ function BuildMetaDataTable(cData, item, existing)
         MetaData.Amount = math.random(5000, 8000)
     elseif itemExist.name == "nitrous" and not MetaData.Nitrous then
         MetaData.Nitrous = 100
+    elseif itemExist.name == "evidence-casing" and not MetaData.CollectedTime then
+        MetaData.CollectedTime = os.time()
+        if MetaData.EvidenceWeapon and MetaData.EvidenceWeapon.serial then
+            local weaponItem = ItemList[MetaData.EvidenceWeapon.name]
+            local weaponLabel = (weaponItem and weaponItem.label) or MetaData.EvidenceWeapon.name or "Unknown Weapon"
+            
+            MetaData.description = string.format(
+                "Casing from %s\nSerial: %s\nAmmo: %s",
+                weaponLabel,
+                MetaData.EvidenceWeapon.serial,
+                MetaData.EvidenceAmmoType or "Unknown"
+            )
+        end
+    elseif itemExist.name == "evidence-projectile" and not MetaData.CollectedTime then
+        MetaData.CollectedTime = os.time()
+        if MetaData.EvidenceDegraded then
+            MetaData.description = "⚠️ Evidence too degraded for analysis"
+        elseif MetaData.EvidenceWeapon and MetaData.EvidenceWeapon.serial then
+            local weaponItem = ItemList[MetaData.EvidenceWeapon.name]
+            local weaponLabel = (weaponItem and weaponItem.label) or MetaData.EvidenceWeapon.name or "Unknown Weapon"
+            
+            MetaData.description = string.format(
+                "Projectile from %s\nSerial: %s\nAmmo: %s",
+                weaponLabel,
+                MetaData.EvidenceWeapon.serial,
+                MetaData.EvidenceAmmoType or "Unknown"
+            )
+        end
+    elseif itemExist.name == "evidence-dna" and not MetaData.CollectedTime then
+        MetaData.CollectedTime = os.time()
+        if MetaData.EvidenceDegraded then
+            MetaData.description = "⚠️ DNA sample too degraded for analysis"
+        elseif MetaData.EvidenceDNA then
+            MetaData.description = string.format(
+                "%s DNA Sample\nSID: %s",
+                MetaData.EvidenceBloodPool and "Blood Pool" or "Blood",
+                MetaData.EvidenceDNA
+            )
+        end
+    elseif itemExist.name == "evidence-paint" and not MetaData.CollectedTime then
+        MetaData.CollectedTime = os.time()
+        if MetaData.EvidenceColor then
+            local color = MetaData.EvidenceColor
+            MetaData.description = string.format(
+                "Paint Fragment\nRGB: (%d, %d, %d)",
+                color.r or 0,
+                color.g or 0,
+                color.b or 0
+            )
+        end
     end
 
     return MetaData
